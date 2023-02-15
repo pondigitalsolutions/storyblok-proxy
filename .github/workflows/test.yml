@@ -1,0 +1,50 @@
+name: Test
+
+on:
+  workflow_call:
+    secrets:
+      NPM_REGISTRY_TOKEN:
+        required: true
+        description: "Your personal access token - PAT"
+      SONAR_TOKEN:
+        required: true
+        description: "The Sonar Cloud Token"
+
+jobs:
+  test:
+    name: Quality Assurance
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure sysctl limits
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    - name: Run tests with dependencies
+      run: |
+        npm ci
+        cp .env.example .env
+        docker compose up -d --wait
+        node_modules/.bin/prisma db push
+        node_modules/.bin/prisma db seed
+        npm run cpd
+        npm run vulnerabilities
+        npm run lint:report
+        npm run test
+      shell: bash
+      env:
+        CI: "true"
+        NPM_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,37 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+    - '**'
+    - '!main'
+    - '!development'
+  workflow_run:
+    workflows: [ "Dependabot PR Check" ]
+    types:
+    - completed
+
+jobs:
+  # Guard workaround for Dependabot PR + secrets
+  check-secret:
+    runs-on: ubuntu-latest
+    outputs:
+      my-key-exists: ${{ steps.my-key-check.outputs.defined }}
+    steps:
+    - name: Check for Secret availability
+      id: my-key-check
+      # perform secret check & put boolean result as an output
+      shell: bash
+      run: |
+        if [ "${{ secrets.SONAR_TOKEN }}" != '' ]; then
+          echo "defined=true" >> $GITHUB_OUTPUT;
+        else
+          echo "defined=false" >> $GITHUB_OUTPUT;
+        fi
+
+  test:
+    uses: ./.github/workflows/test.yml
+    needs: [ check-secret ]
+    secrets:
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
