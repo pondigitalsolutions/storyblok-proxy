@@ -17,7 +17,25 @@ async function handleApiRequests(
   request: Request,
   bindings: Bindings,
 ): Promise<Response> {
-  return new Response('ok');
+  const url = new URL(request.url);
+  const newHeaders = new Headers(request.headers);
+  // Remove Okta auth token but leave other headers.
+  newHeaders.delete('Authorization');
+  // Set Storyblok token.
+  url.searchParams.set('token', bindings.STORYBLOK_TOKEN);
+  const fullPath = `${bindings.STORYBLOK_HOST}/${url.pathname.replace(
+    /^\/+|\/+$/g,
+    '',
+  )}?${url.searchParams.toString()}`;
+  const options: RequestInit = {
+    method: request.method,
+    headers: newHeaders,
+  };
+  if (request.body) {
+    options.body = await request.text();
+  }
+
+  return fetch(fullPath, options);
 }
 
 const worker: ExportedHandler<Bindings> = {

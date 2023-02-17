@@ -37,7 +37,8 @@ jobs:
             OKTA_AUDIENCE
             OKTA_ISSUER
             OKTA_CLIENTID
-            STORYBLOK_APIKEY
+            STORYBLOK_HOST
+            STORYBLOK_TOKEN
             SENTRY_DSN
             ENVIRONMENT
             VERSION
@@ -45,7 +46,8 @@ jobs:
         OKTA_AUDIENCE: ${{ secrets.OKTA_AUDIENCE }}
         OKTA_ISSUER: ${{ secrets.OKTA_ISSUER }}
         OKTA_CLIENTID: ${{ secrets.OKTA_CLIENTID }}
-        STORYBLOK_APIKEY: ${{ secrets.STORYBLOK_APIKEY }}
+        STORYBLOK_HOST: ${{ secrets.STORYBLOK_HOST }}
+        STORYBLOK_TOKEN: ${{ secrets.STORYBLOK_TOKEN }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         ENVIRONMENT: production
         VERSION: ${{ needs.version.outputs.VERSION }}

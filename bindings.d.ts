@@ -6,7 +6,8 @@ interface Bindings {
   OKTA_AUDIENCE: string;
   OKTA_ISSUER: string;
   OKTA_CLIENTID: string;
-  STORYBLOK_APIKEY: string;
+  STORYBLOK_HOST: string;
+  STORYBLOK_TOKEN: string;
   SENTRY_DSN: string;
   ENVIRONMENT: string;
   VERSION: string;
