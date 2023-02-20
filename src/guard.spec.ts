@@ -5,7 +5,7 @@ describe('Guard', () => {
   const defaultUrl = 'https://unittest.local/testpath';
   const defaultParseFn = jest.fn();
   it('should find authorization header', async () => {
-    const env = getMiniflareBindings();
+    const env = getMiniflareBindings() as Bindings;
     const guard = new JwtGuard(env, defaultParseFn);
     const request = new Request(defaultUrl);
     const actual = await guard.canActivate(request);
@@ -18,7 +18,7 @@ describe('Guard', () => {
   });
 
   it('should have a bearer token', async () => {
-    const env = getMiniflareBindings();
+    const env = getMiniflareBindings() as Bindings;
     const guard = new JwtGuard(env, defaultParseFn);
     const headers = new Headers();
     headers.set('authorization', 'simsalabim');
@@ -33,7 +33,7 @@ describe('Guard', () => {
   });
 
   it('should fail the parser', async () => {
-    const env = getMiniflareBindings();
+    const env = getMiniflareBindings() as Bindings;
     const parseFn = (): Promise<JwtParseResult> => {
       return Promise.resolve({
         valid: false,
@@ -54,7 +54,7 @@ describe('Guard', () => {
   });
 
   it('should activate', async () => {
-    const env = getMiniflareBindings();
+    const env = getMiniflareBindings() as Bindings;
     const parseFn = (
       encodedToken: string,
       issuer: string,

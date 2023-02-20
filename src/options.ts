@@ -19,8 +19,9 @@ export async function handleOptions(
     const allowHeaders = requestHeaders || defaultAllowed;
     const token = getTokenFromOrigin(origin, bindings);
     if (token instanceof Error) {
-      return new Response(`Origin not allowed ${origin}`);
+      return new Response(`Origin not allowed ${origin}`, { status: 403 });
     }
+
     return new Response(null, {
       headers: {
         ...corsHeaders,
@@ -28,14 +29,14 @@ export async function handleOptions(
         'access-control-allow-headers': allowHeaders,
       },
     });
-  } else {
-    // Handle standard OPTIONS request.
-    return new Response(null, {
-      headers: {
-        Allow: defaultAllowed,
-      },
-    });
   }
+
+  // Handle standard OPTIONS request.
+  return new Response(null, {
+    headers: {
+      Allow: defaultAllowed,
+    },
+  });
 }
 
 export function getTokenFromOrigin(
