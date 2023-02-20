@@ -108,8 +108,8 @@ describe('handleAllRequests', () => {
     'proxy request: $name = $expectPath',
     async ({ request, expectPath, expectBody, expectStatus }) => {
       // Monkey patch outgoing calls to prevent them.
-      const canActivate = JwtGuard.prototype.canActivate;
-      JwtGuard.prototype.canActivate = (): Promise<JwtError | null> => {
+      const canActivate = JwtGuard.prototype.validateRequest;
+      JwtGuard.prototype.validateRequest = (): Promise<JwtError | null> => {
         return Promise.resolve(null);
       };
       const ctx = {
@@ -133,7 +133,7 @@ describe('handleAllRequests', () => {
         expect(res.status).toBe(200);
       }
 
-      JwtGuard.prototype.canActivate = canActivate;
+      JwtGuard.prototype.validateRequest = canActivate;
     },
   );
 });

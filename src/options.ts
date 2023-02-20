@@ -7,6 +7,11 @@ const corsHeaders = {
   'access-control-max-age': '86400',
 };
 
+/**
+ * Handles all OPTIONS method requests for CORS preflight checks. It first checks the configured
+ * bindings.STORYBLOK_ORIGIN_TOKENS for valid origins. If the request Origin header is not
+ * matched with the env vale the frontend will get CORS errors.
+ */
 export async function handleOptions(
   request: Request,
   bindings: Bindings,
@@ -39,6 +44,9 @@ export async function handleOptions(
   });
 }
 
+/**
+ * Reads the env var STORYBLOK_ORIGIN_TOKENS for mapped tokens to origin regular expressions.
+ */
 export function getTokenFromOrigin(
   origin: string,
   bindings: Bindings,

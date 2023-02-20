@@ -8,7 +8,7 @@ describe('Guard', () => {
     const env = getMiniflareBindings() as Bindings;
     const guard = new JwtGuard(env, defaultParseFn);
     const request = new Request(defaultUrl);
-    const actual = await guard.canActivate(request);
+    const actual = await guard.validateRequest(request);
     expect(actual).toBeInstanceOf(JwtError);
     if (actual instanceof JwtError) {
       expect(actual.message).toBe(
@@ -25,7 +25,7 @@ describe('Guard', () => {
     const request = new Request(defaultUrl, {
       headers: headers,
     });
-    const actual = await guard.canActivate(request);
+    const actual = await guard.validateRequest(request);
     expect(actual).toBeInstanceOf(JwtError);
     if (actual instanceof JwtError) {
       expect(actual.message).toBe('Provide valid Bearer token: 403');
@@ -46,7 +46,7 @@ describe('Guard', () => {
     const request = new Request(defaultUrl, {
       headers: headers,
     });
-    const actual = await guard.canActivate(request);
+    const actual = await guard.validateRequest(request);
     expect(actual).toBeInstanceOf(JwtError);
     if (actual instanceof JwtError) {
       expect(actual.message).toBe('Token is invalid: unit test: 403');
@@ -78,7 +78,7 @@ describe('Guard', () => {
     const request = new Request(defaultUrl, {
       headers: headers,
     });
-    const actual = await guard.canActivate(request);
+    const actual = await guard.validateRequest(request);
     expect(actual).toEqual(null);
   });
 });

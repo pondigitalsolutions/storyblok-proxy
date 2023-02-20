@@ -12,13 +12,17 @@ export type parseJwtFn = (
   resolveKey?: (decoded: DecodedJwt) => Promise<CryptoKey | null>,
 ) => Promise<JwtParseResult>;
 
+/**
+ * Helper class to validate JWT tokens. Setup as a class for easier dependency injection
+ * and testing of JWT tokens. The parseJwtFn is replaced with mock functions in tests.
+ */
 export class JwtGuard {
   constructor(
     private readonly bindings: Bindings,
     private readonly parseJwtFn: parseJwtFn,
   ) {}
 
-  async canActivate(request: Request): Promise<JwtError | null> {
+  async validateRequest(request: Request): Promise<JwtError | null> {
     const authHeader = request.headers.get('authorization');
     if (!authHeader) {
       return new JwtError('Please provide token to access service', 403);
@@ -47,16 +51,19 @@ export class JwtError extends Error {
   }
 }
 
+/**
+ * Main method to test for valid JWT authenticated requests.
+ */
 export async function guard(
   request: Request,
   bindings: Bindings,
   handler: requestFn,
 ): Promise<Response> {
   const guard = new JwtGuard(bindings, parseJwt);
-  const allowed = await guard.canActivate(request);
-  if (allowed instanceof JwtError) {
-    console.error(`Request guarded with error: ${allowed.message}`);
-    return new Response(allowed.message, { status: allowed.code });
+  const err = await guard.validateRequest(request);
+  if (err instanceof JwtError) {
+    console.error(`Request guarded with error: ${err.message}`);
+    return new Response(err.message, { status: err.code });
   }
 
   return handler(request, bindings);
