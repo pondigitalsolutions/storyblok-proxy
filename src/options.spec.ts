@@ -8,7 +8,7 @@ describe('Should handle OPTIONS request', () => {
     OKTA_CLIENTID: 'someId',
     STORYBLOK_HOST: 'https://api.storyblok.com',
     STORYBLOK_ORIGIN_TOKENS:
-      '[{"token":"Qiu4cDrlCcQaKrxDSinPkwtt","regex":"^.+localhost:3000.*$"}]',
+      '[{"token":"1234","regex":"^.+localhost:3000.*$"}]',
     SENTRY_DSN: 'https://sentry.io',
     ENVIRONMENT: 'development',
     VERSION: 'v0.0.0',
