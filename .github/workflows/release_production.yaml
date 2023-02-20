@@ -38,7 +38,7 @@ jobs:
             OKTA_ISSUER
             OKTA_CLIENTID
             STORYBLOK_HOST
-            STORYBLOK_TOKEN
+            STORYBLOK_ORIGIN_TOKENS
             SENTRY_DSN
             ENVIRONMENT
             VERSION
@@ -47,7 +47,7 @@ jobs:
         OKTA_ISSUER: ${{ secrets.OKTA_ISSUER }}
         OKTA_CLIENTID: ${{ secrets.OKTA_CLIENTID }}
         STORYBLOK_HOST: ${{ secrets.STORYBLOK_HOST }}
-        STORYBLOK_TOKEN: ${{ secrets.STORYBLOK_TOKEN }}
+        STORYBLOK_ORIGIN_TOKENS: ${{ secrets.STORYBLOK_ORIGIN_TOKENS }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         ENVIRONMENT: production
         VERSION: ${{ needs.version.outputs.VERSION }}
