@@ -32,9 +32,6 @@ jobs:
       run: |
         npm ci
         cp .env.example .env
-        docker compose up -d --wait
-        node_modules/.bin/prisma db push
-        node_modules/.bin/prisma db seed
         npm run cpd
         npm run vulnerabilities
         npm run lint:report

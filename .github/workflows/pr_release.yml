@@ -1,0 +1,26 @@
+name: pr_release
+
+on:
+  pull_request:
+    types:
+    - closed
+    branches:
+    - main
+
+jobs:
+  release:
+    name: Create Release of PR
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.tag_name }}
+    if: github.event.pull_request.merged
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@master
+    - name: Version upgrade
+      id: version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: rymndhng/release-on-push-action@master
+      with:
+        bump_version_scheme: minor
