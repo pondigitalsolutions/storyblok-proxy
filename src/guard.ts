@@ -22,6 +22,10 @@ export class JwtGuard {
     private readonly parseJwtFn: parseJwtFn,
   ) {}
 
+  /**
+   * Validates incoming request for authorization header JWT Bearer token.
+   * Returns null if request is valid else a validation error.
+   */
   async validateRequest(request: Request): Promise<JwtError | null> {
     const authHeader = request.headers.get('authorization');
     if (!authHeader) {

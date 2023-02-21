@@ -32,6 +32,24 @@ describe('Guard', () => {
     }
   });
 
+  it('should fail an empty Bearer token', async () => {
+    const env = getMiniflareBindings() as Bindings;
+    const parseFn = (): Promise<JwtParseResult> => {
+      return Promise.resolve({
+        valid: false,
+        reason: 'empty bearer token',
+      });
+    };
+    const guard = new JwtGuard(env, parseFn);
+    const headers = new Headers();
+    headers.set('authorization', 'Bearer');
+    const request = new Request(defaultUrl, {
+      headers: headers,
+    });
+    const actual = await guard.validateRequest(request);
+    expect(actual).toBeInstanceOf(JwtError);
+  });
+
   it('should fail the parser', async () => {
     const env = getMiniflareBindings() as Bindings;
     const parseFn = (): Promise<JwtParseResult> => {
