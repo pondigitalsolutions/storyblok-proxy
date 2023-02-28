@@ -1,5 +1,8 @@
 import { captureError } from '@cfworker/sentry';
 
+/**
+ * Error handler that uses Sentry as logging store because Cloudflare logging is limited.
+ */
 export async function sentry(
   request: Request,
   bindings: Bindings,

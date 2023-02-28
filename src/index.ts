@@ -2,11 +2,17 @@ import { guard } from '@/guard';
 import { sentry } from '@/sentry';
 import { getTokenFromOrigin, handleOptions } from '@/options';
 
+/**
+ * Used as config structure to match Origin header regex to StoryBlok token.
+ */
 export interface OriginToken {
   regex: string;
   token: string;
 }
 
+/**
+ * Main requests handler that routes OPTIONS requests, errors or StoryBlok API requests.
+ */
 export async function handleAllRequests(
   request: Request,
   bindings: Bindings,
@@ -22,6 +28,9 @@ export async function handleAllRequests(
   }
 }
 
+/**
+ * Proxies requests to StoryBlok if possible.
+ */
 async function handleApiRequests(
   request: Request,
   bindings: Bindings,
@@ -38,10 +47,10 @@ async function handleApiRequests(
 
   // Set Storyblok token based on Origin.
   url.searchParams.set('token', token);
+  // Remove leading and trailing slashes of the pathname for cleanliness.
   const path = url.pathname.replace(/^\/+|\/+$/g, '');
-  const fullPath = `${
-    bindings.STORYBLOK_HOST
-  }/${path}?${url.searchParams.toString()}`;
+  const query = url.searchParams.toString();
+  const fullPath = `${bindings.STORYBLOK_HOST}/${path}?${query}`;
 
   // Remove Okta auth token but leave other headers for StoryBlok.
   const newHeaders = new Headers(request.headers);
@@ -50,6 +59,7 @@ async function handleApiRequests(
     method: request.method,
     headers: newHeaders,
   };
+  // Copy the body data to StoryBlok if available.
   if (request.body) {
     options.body = await request.text();
   }
@@ -59,8 +69,10 @@ async function handleApiRequests(
   return fetch(fullPath, options);
 }
 
+/**
+ * Main entrypoint for the Cloudflare worker
+ */
 const worker: ExportedHandler<Bindings> = {
   fetch: handleAllRequests,
 };
-
 export default worker;
