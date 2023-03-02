@@ -1,4 +1,4 @@
-# StoryBlok proxy as a CloudFlare worker
+# StoryBlok proxy as a Cloudflare worker
 
 This worker acts as a middleman between the SPA frontend and the StoryBlok API. Because of the SPA nature the StoryBlok
 API key is exposed in the frontend code. This is not secure.
@@ -9,9 +9,9 @@ need an OAuth2 JWT Bearer token as an Authorization header. Use Okta OAuth2 to s
 
 ## Architecture
 
-- SPA: Can be a Vue or React SPA deployed to CLoudFlare
+- SPA: Can be a Vue or React SPA deployed to Cloudflare
 - Okta: The OAuth2 identity provider
-- Worker: This StoryBlok-proxy worker deployed to CloudFlare
+- Worker: This StoryBlok-proxy worker deployed to Cloudflare
 - StoryBlok: External CMS provided API
 
 ```mermaid
@@ -27,10 +27,11 @@ sequenceDiagram
 
 ## Configuring the worker
 
-The env STORYBLOK_HOST needs the default api host `https://api.storyblok.com/v1`. The v2 endpoint is not supported because
-that uses StoryBloks own OAuth2 token verifier.
+See the file .env.example for all the environment variables that need to be set in Cloudflare.
 
-The env STORYBLOK_ORIGIN_TOKENS is a JSON encoded string `'[{"token":"changeme","regex":"^.+localhost:3000.*$"}]'` . It is
+The env `STORYBLOK_HOST` needs the default api host `https://api.storyblok.com/v2`.
+
+The env `STORYBLOK_ORIGIN_TOKENS` is a JSON encoded string `'[{"token":"changeme","regex":"^.+localhost:3000.*$"}]'` . It is
 an array of objects with keys token (The StoryBlok API key) and regex pattern.
 
 > The regex pattern matches with the Origin header on all requests. Make sure your regexes are specific enough as not 
