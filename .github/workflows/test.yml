@@ -6,9 +6,6 @@ on:
       NPM_REGISTRY_TOKEN:
         required: true
         description: "Your personal access token - PAT"
-      SONAR_TOKEN:
-        required: true
-        description: "The Sonar Cloud Token"
 
 jobs:
   test:
@@ -40,9 +37,3 @@ jobs:
       env:
         CI: "true"
         NPM_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      continue-on-error: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
