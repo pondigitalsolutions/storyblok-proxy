@@ -1,6 +1,6 @@
 {
   "name": "storyblok-proxy",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "StoryBlok proxy worker project using Miniflare, TypeScript, esbuild and Jest",
   "type": "module",
   "module": "./dist/index.mjs",
