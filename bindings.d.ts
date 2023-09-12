@@ -8,6 +8,7 @@ interface Bindings {
   OKTA_CLIENTID: string;
   STORYBLOK_HOST: string;
   STORYBLOK_ORIGIN_TOKENS: string;
+  STORYBLOK_CACHE_TTL?: string;
   SENTRY_DSN: string;
   ENVIRONMENT: string;
   VERSION: string;

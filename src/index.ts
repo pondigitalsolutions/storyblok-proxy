@@ -63,8 +63,19 @@ async function handleApiRequests(
   if (request.body) {
     options.body = await request.text();
   }
+  let cached = '';
+  if (bindings.STORYBLOK_CACHE_TTL) {
+    options.cf = {
+      cacheTtlByStatus: {
+        '200-299': Number(bindings.STORYBLOK_CACHE_TTL),
+        '404': 1,
+        '500-599': 0,
+      },
+    };
+    cached = `CACHED TTL on 200-299 ${bindings.STORYBLOK_CACHE_TTL} `;
+  }
 
-  console.log(`PROXY ${options.method} ${fullPath}`);
+  console.log(`PROXY ${options.method} ${fullPath} ${cached}`);
 
   return fetch(fullPath, options);
 }
