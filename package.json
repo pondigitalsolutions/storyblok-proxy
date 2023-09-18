@@ -31,7 +31,7 @@
     "@types/jest": "^29.2.3",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
-    "esbuild": "^0.17.19",
+    "esbuild": "^0.19.3",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^4.2.1",
