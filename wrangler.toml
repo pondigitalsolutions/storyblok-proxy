@@ -16,3 +16,6 @@ name = "storyblok-proxy"
 
 [env.staging]
 name = "stg-storyblok-proxy"
+
+[env.development]
+name = "dev-storyblok-proxy"
