@@ -48,7 +48,7 @@
     "wrangler": "^2.3.0"
   },
   "dependencies": {
-    "@cfworker/jwt": "^4.0.4",
+    "@cfworker/jwt": "^4.0.6",
     "@cfworker/sentry": "^1.12.4"
   },
   "jest": {
