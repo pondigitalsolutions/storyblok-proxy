@@ -31,8 +31,11 @@ See the file .env.example for all the environment variables that need to be set 
 
 The env `STORYBLOK_HOST` needs the default api host `https://api.storyblok.com/v2`.
 
-The env `STORYBLOK_ORIGIN_TOKENS` is a JSON encoded string `'[{"token":"changeme","regex":"^.+localhost:3000.*$"}]'` . It is
-an array of objects with keys token (The StoryBlok API key) and regex pattern.
+The env `STORYBLOK_ORIGIN_TOKENS` is a base64 encoded JSON string `'[{"token":"changeme","regex":"^.+localhost:3000.*$"}]'` . It is an array of objects with keys token (The StoryBlok API key) and regex pattern. It needs to be base64 encoded. The regex pattern is used to match the Origin header of the request.
 
-> The regex pattern matches with the Origin header on all requests. Make sure your regexes are specific enough as not 
+```sh
+echo '[{"token":"changeme","regex":"^.+localhost:3000.*$"}]' | base64
+```
+
+> The regex pattern matches with the Origin header on all requests. Make sure your regexes are specific enough as not
 > to match with multiple tokens.

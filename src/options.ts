@@ -52,9 +52,8 @@ export function getTokenFromOrigin(
   bindings: Bindings,
 ): string | Error {
   try {
-    const tokenMap: OriginToken[] = JSON.parse(
-      bindings.STORYBLOK_ORIGIN_TOKENS,
-    );
+    const decodedOriginTokens = parseBase64(bindings.STORYBLOK_ORIGIN_TOKENS);
+    const tokenMap: OriginToken[] = JSON.parse(decodedOriginTokens);
     const tokens = tokenMap.filter((item) => origin.match(item.regex));
     if (tokens[0]) {
       return tokens[0].token;
@@ -69,5 +68,22 @@ export function getTokenFromOrigin(
     throw new Error(
       `Incorrect configuration in STORYBLOK_ORIGIN_TOKENS error: ${err.message}`,
     );
+  }
+}
+
+/**
+ * Parses a base64 encoded string.
+ * @param {string} str - base64 encoded string
+ * @returns {string} - decoded string
+ * @throws {Error} - if the string is not valid base64
+ */
+function parseBase64(str: string) {
+  if (typeof str !== 'string' || str.trim() === '') {
+    throw new Error(`Input must be a non-empty string.`);
+  }
+  try {
+    return atob(str);
+  } catch (e) {
+    throw new Error(`Failed to decode base64 string: ${str}`);
   }
 }
