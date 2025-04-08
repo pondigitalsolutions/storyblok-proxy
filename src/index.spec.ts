@@ -142,7 +142,7 @@ export function getFilledMiniflareBindings() {
   const bindings = getMiniflareBindings();
   bindings.STORYBLOK_HOST = 'http://localhost';
   bindings.STORYBLOK_ORIGIN_TOKENS =
-    '[{"token":"1234","regex":"^.+localhost:3000.*$"}]';
+    'W3sidG9rZW4iOiIxMjM0IiwicmVnZXgiOiJeLitsb2NhbGhvc3Q6MzAwMC4qJCJ9XQo=';
 
   return bindings as Bindings;
 }
