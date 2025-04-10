@@ -27,7 +27,7 @@ sequenceDiagram
 
 ## Configuring the worker
 
-See the file .env.example for all the environment variables that need to be set in Cloudflare.
+See the file .dev.vars.example for all the environment variables that need to be set in Cloudflare.
 
 The env `STORYBLOK_HOST` needs the default api host `https://api.storyblok.com/v2`.
 

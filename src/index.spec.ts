@@ -1,5 +1,6 @@
-import { handleAllRequests } from '@/index';
-import { JwtError, JwtGuard } from '@/guard';
+import { describe, it, expect } from 'vitest';
+import { handleAllRequests } from './index';
+import { JwtError, JwtGuard } from './guard';
 import { MockInterceptor } from 'undici/types/mock-interceptor';
 
 describe('handleAllRequests', () => {

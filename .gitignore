@@ -177,3 +177,8 @@ report.json
 
 test-report.xml
 report
+
+# wrangler project
+
+.dev.vars
+.wrangler/

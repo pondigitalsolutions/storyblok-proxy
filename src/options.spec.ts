@@ -1,4 +1,5 @@
-import { handleOptions } from '@/options';
+import { describe, it, expect } from 'vitest';
+import { handleOptions } from './options';
 
 describe('Should handle OPTIONS request', () => {
   const defaultUrl = 'http://localhost';

@@ -1,9 +1,10 @@
-import { JwtError, JwtGuard } from '@/guard';
+import { describe, it, expect, vi } from 'vitest';
+import { JwtError, JwtGuard } from './guard';
 import { DecodedJwt, JwtParseResult } from '@cfworker/jwt/src/types';
 
 describe('Guard', () => {
   const defaultUrl = 'https://unittest.local/testpath';
-  const defaultParseFn = jest.fn();
+  const defaultParseFn = vi.fn();
   it('should find authorization header', async () => {
     const env = getMiniflareBindings() as Bindings;
     const guard = new JwtGuard(env, defaultParseFn);
