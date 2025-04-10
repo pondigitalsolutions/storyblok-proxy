@@ -2,7 +2,7 @@
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "storyblok-proxy",
     "main": "dist/index.mjs",
-    "compatibility_date": "2025-04-10",
+    "compatibility_date": "2025-03-10",
     "compatibility_flags": [],
     "env": {
         "production": {
