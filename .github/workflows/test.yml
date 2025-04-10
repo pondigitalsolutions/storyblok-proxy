@@ -28,7 +28,7 @@ jobs:
     - name: Run tests with dependencies
       run: |
         npm ci
-        cp .env.example .env
+        cp .dev.vars.example .dev.vars
         npm run cpd
         npm run vulnerabilities
         npm run lint:report
