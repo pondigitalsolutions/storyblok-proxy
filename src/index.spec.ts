@@ -136,6 +136,37 @@ describe('handleAllRequests', () => {
       JwtGuard.prototype.validateRequest = canActivate;
     },
   );
+
+  it('reports upstream fetch failures via Sentry as a 500', async () => {
+    const canActivate = JwtGuard.prototype.validateRequest;
+    JwtGuard.prototype.validateRequest = () => Promise.resolve(null);
+    const downBindings = {
+      ...bindings,
+      STORYBLOK_HOST: 'http://down.example',
+      SENTRY_DSN: 'https://key@sentry.example/1',
+    } as Bindings;
+    fetchMock
+      .get('http://down.example')
+      .intercept({ method: () => true, path: () => true })
+      .replyWithError(new Error('upstream unreachable'));
+    fetchMock
+      .get('https://sentry.example')
+      .intercept({ method: 'POST', path: () => true })
+      .reply(200, {});
+    const ctx = { waitUntil: jest.fn(), passThroughOnException: jest.fn() };
+
+    const res = await handleAllRequests(
+      new Request('http://localhost/v1/cdn/stories', {
+        headers: defaultHeaders,
+      }),
+      downBindings,
+      ctx,
+    );
+
+    expect(res.status).toBe(500);
+    expect(ctx.waitUntil).toHaveBeenCalled();
+    JwtGuard.prototype.validateRequest = canActivate;
+  });
 });
 
 export function getFilledMiniflareBindings() {
