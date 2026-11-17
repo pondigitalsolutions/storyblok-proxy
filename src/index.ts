@@ -22,7 +22,9 @@ export async function handleAllRequests(
     if (request.method === 'OPTIONS') {
       return handleOptions(request, bindings);
     }
-    return guard(request, bindings, handleApiRequests);
+    // Must await: otherwise rejections (e.g. a failing upstream fetch) escape
+    // this try/catch and never reach Sentry.
+    return await guard(request, bindings, handleApiRequests);
   } catch (err: unknown) {
     return sentry(request, bindings, ctx, err);
   }
@@ -77,7 +79,11 @@ async function handleApiRequests(
 
   console.log(`PROXY ${options.method} ${fullPath} ${cached}`);
 
-  return fetch(fullPath, options);
+  const response = await fetch(fullPath, options);
+  if (response.status >= 500) {
+    console.error(`UPSTREAM ${response.status} ${options.method} ${path}`);
+  }
+  return response;
 }
 
 /**
