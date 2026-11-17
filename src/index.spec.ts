@@ -149,10 +149,14 @@ describe('handleAllRequests', () => {
       .get('http://down.example')
       .intercept({ method: () => true, path: () => true })
       .replyWithError(new Error('upstream unreachable'));
+    const sentryRequest = jest.fn();
     fetchMock
       .get('https://sentry.example')
       .intercept({ method: 'POST', path: () => true })
-      .reply(200, {});
+      .reply((opts) => {
+        sentryRequest(opts);
+        return { statusCode: 200, data: {} };
+      });
     const ctx = { waitUntil: jest.fn(), passThroughOnException: jest.fn() };
 
     const res = await handleAllRequests(
@@ -165,6 +169,8 @@ describe('handleAllRequests', () => {
 
     expect(res.status).toBe(500);
     expect(ctx.waitUntil).toHaveBeenCalled();
+    await Promise.all(ctx.waitUntil.mock.calls.map(([task]) => task));
+    expect(sentryRequest).toHaveBeenCalledTimes(1);
     JwtGuard.prototype.validateRequest = canActivate;
   });
 });
